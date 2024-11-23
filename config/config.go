@@ -23,8 +23,9 @@ type DatabaseConfig struct {
 }
 
 type RedisConfig struct {
-	Host string `mapstructure:"host"`
-	Port int    `mapstructure:"port"`
+	Prefix string `mapstructure:"prefix"`
+	Host   string `mapstructure:"host"`
+	Port   int    `mapstructure:"port"`
 }
 
 func LoadConfig() (*Config, error) {

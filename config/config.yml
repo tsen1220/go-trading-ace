@@ -9,5 +9,6 @@ database:
   name: "go-uniswap-db"
 
 redis:
+  prefix: "go-uniswap:"
   host: "redis"
   port: 6379

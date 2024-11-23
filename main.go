@@ -38,7 +38,7 @@ func NewDB(config *config.Config) (*sql.DB, error) {
 
 func NewRedis(config *config.Config) (*redis.Client, error) {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", config.Database.Host, config.Redis.Port),
+		Addr:     fmt.Sprintf("%s:%d", config.Redis.Host, config.Redis.Port),
 		Password: "",
 		DB:       0,
 	})
