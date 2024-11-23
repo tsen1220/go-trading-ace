@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  go-uniswap:
+    build: .
+    image: go-uniswap
+    ports:
+      - "8080:8080"
+    depends_on:
+      - go-uniswap-db
+      - go-uniswap-redis
+    networks:
+      - go-uniswap-network
+  
+  go-uniswap-db:
+    image: postgres:14.15-alpine
+    container_name: go-uniswap-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: go-uniswap-db
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - go-uniswap-network
+
+  go-uniswap-redis:
+    image: redis:7.4.1-alpine
+    container_name: go-uniswap-redis
+    ports:
+      - "6379:6379"
+    volumes: 
+      - redis-data:/data
+    networks:
+      - go-uniswap-network
+
+networks:
+  go-uniswap-network:
+    driver: bridge
+
+volumes:
+  pg-data:
+  redis-data:
