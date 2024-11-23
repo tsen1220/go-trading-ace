@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: go-uniswap-db
+      POSTGRES_DB: go-uniswap
     volumes:
       - pg-data:/var/lib/postgresql/data
     networks:

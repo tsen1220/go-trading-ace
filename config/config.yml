@@ -6,7 +6,7 @@ database:
   user: "root"
   password: "root"
   port: 5432
-  name: "go-uniswap-db"
+  name: "go-uniswap"
 
 redis:
   prefix: "go-uniswap:"
