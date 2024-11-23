@@ -1,18 +1,18 @@
 version: '3.7'
 
 services:
-  go-uniswap:
+  app:
     build: .
     image: go-uniswap
     ports:
       - "8080:8080"
     depends_on:
-      - go-uniswap-db
-      - go-uniswap-redis
+      - postgres
+      - redis
     networks:
       - go-uniswap-network
   
-  go-uniswap-db:
+  postgres:
     image: postgres:14.15-alpine
     container_name: go-uniswap-db
     ports:
@@ -26,7 +26,7 @@ services:
     networks:
       - go-uniswap-network
 
-  go-uniswap-redis:
+  redis:
     image: redis:7.4.1-alpine
     container_name: go-uniswap-redis
     ports:

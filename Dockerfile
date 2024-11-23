@@ -13,6 +13,7 @@ FROM alpine:latest
 
 RUN apk --no-cache add ca-certificates
 
-COPY --from=builder /app/main /app/main
+COPY --from=builder /app/main main
+COPY --from=builder /app/config config
 
-CMD ["/app/main"]
+CMD ["/main"]

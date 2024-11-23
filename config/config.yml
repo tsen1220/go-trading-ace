@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+database:
+  host: "postgres"
+  user: "root"
+  password: "root"
+  port: 5432
+  name: "go-uniswap-db"
+
+redis:
+  host: "redis"
+  port: 6379

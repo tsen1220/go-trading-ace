@@ -1,7 +1,25 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"go-uniswap/config"
 
-func Home(ctx *gin.Context) {
+	"github.com/gin-gonic/gin"
+)
+
+type IHomeController interface {
+	Home(ctx *gin.Context)
+}
+
+type HomeController struct {
+	Config *config.Config
+}
+
+func NewHomeController(config *config.Config) IHomeController {
+	return &HomeController{
+		Config: config,
+	}
+}
+
+func (h *HomeController) Home(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"hello": "world"})
 }

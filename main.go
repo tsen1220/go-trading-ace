@@ -3,7 +3,10 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"go-uniswap/config"
 	"go-uniswap/controllers"
+	"go-uniswap/helpers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -12,14 +15,20 @@ import (
 
 var ctx = context.Background()
 
-func NewDB() (*sql.DB, error) {
-	connStr := "postgres://root:root@go-uniswap-db:5432/go-uniswap-db"
+func NewDB(config *config.Config) (*sql.DB, error) {
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%d/%s",
+		config.Database.User,
+		config.Database.Password,
+		config.Database.Host,
+		config.Database.Port,
+		config.Database.Name,
+	)
+
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
 	}
 
-	// 測試連接
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
@@ -27,15 +36,13 @@ func NewDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func NewRedis() (*redis.Client, error) {
-	// 建立 Redis 客戶端
+func NewRedis(config *config.Config) (*redis.Client, error) {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379", // Redis 伺服器地址，這裡假設是 localhost 和 6379 埠
-		Password: "",               // 如果有密碼，請填寫
-		DB:       0,                // 選擇使用的 DB，默認是 0
+		Addr:     fmt.Sprintf("%s:%d", config.Database.Host, config.Redis.Port),
+		Password: "",
+		DB:       0,
 	})
 
-	// 驗證 Redis 連線是否正常
 	_, err := rdb.Ping(ctx).Result()
 	if err != nil {
 		return nil, err
@@ -49,18 +56,32 @@ func NewGinServer() *gin.Engine {
 	return r
 }
 
-func SetupServer(r *gin.Engine) {
+func SetupServer(
+	r *gin.Engine,
+	config *config.Config,
+	homeController controllers.IHomeController,
+) {
 
-	r.GET("/", controllers.Home)
+	r.GET("/", homeController.Home)
 
-	r.Run(":8080")
+	r.Run(fmt.Sprintf(":%d", config.Server.Port))
 }
 
 func main() {
 	app := fx.New(
 		fx.Provide(
+
+			// Base
 			NewGinServer,
 			NewDB,
+			NewRedis,
+			config.LoadConfig,
+
+			// Controllers
+			controllers.NewHomeController,
+
+			// Helper
+			helpers.NewRedisHelper,
 		),
 		fx.Invoke(SetupServer),
 	)

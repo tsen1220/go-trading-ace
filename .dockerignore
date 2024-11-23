@@ -1,0 +1,16 @@
+*.exe
+*.out
+*.test
+
+*.cache
+*.d
+
+.git
+.gitignore
+
+.env
+
+Dockerfile*
+.dockerignore
+
+README.md
