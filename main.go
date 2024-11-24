@@ -62,8 +62,7 @@ func SetupServer(
 	config *config.Config,
 	homeController controllers.IHomeController,
 ) {
-
-	r.GET("/", homeController.Home)
+	homeController.SetRoutes(r)
 
 	r.Run(fmt.Sprintf(":%d", config.Server.Port))
 }
