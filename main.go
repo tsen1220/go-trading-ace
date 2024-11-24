@@ -8,6 +8,7 @@ import (
 	"go-uniswap/controllers"
 	"go-uniswap/helpers"
 	"go-uniswap/logger"
+	"go-uniswap/routes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -60,9 +61,9 @@ func NewGinServer() *gin.Engine {
 func SetupServer(
 	r *gin.Engine,
 	config *config.Config,
-	homeController controllers.IHomeController,
+	homeRoutes routes.IHomeRoutes,
 ) {
-	homeController.SetRoutes(r)
+	homeRoutes.RegisterHomeRoutes()
 
 	r.Run(fmt.Sprintf(":%d", config.Server.Port))
 }
@@ -80,6 +81,9 @@ func main() {
 
 			// Controllers
 			controllers.NewHomeController,
+
+			// Routes
+			routes.NewHomeRoutes,
 
 			// Helper
 			helpers.NewRedisHelper,

@@ -7,7 +7,6 @@ import (
 )
 
 type IHomeController interface {
-	SetRoutes(r *gin.Engine)
 	Home(ctx *gin.Context)
 }
 
@@ -19,10 +18,6 @@ func NewHomeController(config *config.Config) IHomeController {
 	return &HomeController{
 		Config: config,
 	}
-}
-
-func (h *HomeController) SetRoutes(r *gin.Engine) {
-	r.GET("/", h.Home)
 }
 
 func (h *HomeController) Home(ctx *gin.Context) {
