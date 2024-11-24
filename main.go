@@ -7,6 +7,7 @@ import (
 	"go-uniswap/config"
 	"go-uniswap/controllers"
 	"go-uniswap/helpers"
+	"go-uniswap/logger"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -76,6 +77,7 @@ func main() {
 			NewDB,
 			NewRedis,
 			config.LoadConfig,
+			logger.NewLogrusLogger,
 
 			// Controllers
 			controllers.NewHomeController,
