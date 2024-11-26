@@ -216,3 +216,33 @@ func TestRedisHelper_SetTTL(t *testing.T) {
 	err = r.SetTTL(key, expiration)
 	assert.Error(t, err)
 }
+
+func TestRedisHelper_HGetAll(t *testing.T) {
+	// 設定測試環境
+	r, mock := setupRedisHelper()
+
+	// 定義測試數據
+	key := "key"
+	expectedResult := map[string]string{
+		"field1": "value1",
+		"field2": "value2",
+	}
+
+	// 模擬 HGetAll 的行為
+	mock.ExpectHGetAll("test:" + key).SetVal(expectedResult)
+
+	// 呼叫 HGetAll 方法
+	result, err := r.HGetAll(key)
+
+	// 驗證結果
+	assert.NoError(t, err)
+	assert.Equal(t, expectedResult, result)
+
+	// 模擬 Redis 返回錯誤
+	mock.ExpectHGetAll("test:" + key).SetErr(errors.New("redis error"))
+
+	// 再次呼叫 HGetAll 並檢查錯誤
+	result, err = r.HGetAll(key)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+}
