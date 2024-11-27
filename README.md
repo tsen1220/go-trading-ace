@@ -46,8 +46,9 @@ Before getting started, ensure that you have the following software installed on
       host: "redis"
       port: 6379
 
+# Example Key
     infura:
-      key: "your-key"
+      key: "94b901bec49345789149a20442ce1a3b"
     ```
 3. Build and Run with Docker Compose
     ```
